@@ -1,39 +1,42 @@
 import { Fragment } from 'react';
 import { MouseEvent } from "react";
+import { useState } from 'react';
 
-function ListGroup() {
-    let items = [
-        'New York',
-        'San Francisco',
-        'Tokyo',
-        'London',
-        'Paris'
-    ];
+interface ListProps {
+    items: string[],
+    heading: string,
+    onSelect: (item: string) => void
+}
 
-    // items = [];
+function ListGroup(props: ListProps) {
+    const [selectedIndex, setSelectedIndex] = useState(-1);
 
     const emptyMessage = () => {
-        return items.length === 0 ? <p>No item found</p> : null;
+        return props.items.length === 0 ? <p>No item found</p> : null;
     }
 
-    const handleClick = (event:MouseEvent, item: String, index: Number) => {
-        console.log(`Clicked item: ${item} ${index}`, event)
+    const handleClick = (event:MouseEvent, item: String, index: number) => {
+        setSelectedIndex(index);
+        console.log(`Clicked item: ${item} ${index}`, event);
     }
 
     return (
         <Fragment>
-            <h1>List</h1>
-            {emptyMessage()}
+            <h1>{ props.heading }</h1>
+            { emptyMessage() }
             <ul className="list-group">
-                {items.map((item, index) => {
+                {props.items.map((item, index) => {
                     return <li key={index}
-                        onClick={(event) => { handleClick(event, item, index) }}
-                        className="list-group-item">{item}</li>
+                        onClick={(event) => {
+                            handleClick(event, item, index);
+                            props.onSelect(item)
+                        }}
+
+                        className={ 'list-group-item ' + (selectedIndex == index ? 'active' : '') }>{item}</li>
                 })}
                 <li className="list-group-item">An item</li>
          </ul>
         </Fragment>
-
     );
 }
 
