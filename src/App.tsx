@@ -1,6 +1,7 @@
 
 import Alert from "./components/Alert";
 import ButstrapButton from "./components/ButstrapButton";
+import { useState } from 'react';
 // import ListGroup from "./components/ListGroup";
 
 // let cities = [
@@ -16,13 +17,15 @@ const handleSelectItem = (item: string) => {
 }
 
 function App() {
+    const [ alertVisible, setAlertVisible ] = useState(false);
+
     // return <div><ListGroup items={cities} heading="Cities" onSelect={handleSelectItem}/></div>
     return (
-        <div className="alert alert-primary">
-            <Alert>Hello <span>World 2</span></Alert>
+        <div>
+            { alertVisible && <Alert onClose={() => { setAlertVisible(false)} }>Hello <span>World 2</span></Alert> }
 
             <ButstrapButton
-                onClick={() => console.log('Clicked') }
+                onClick={() => { setAlertVisible(true) }}
                 color="primary">Push me</ButstrapButton>
         </div>
 
