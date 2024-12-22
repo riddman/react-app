@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import { MouseEvent } from "react";
 import { useState } from 'react';
+import styles from './ListGroup.module.css';
 
 interface ListProps {
     items: string[],
@@ -24,7 +25,7 @@ function ListGroup(props: ListProps) {
         <Fragment>
             <h1>{ props.heading }</h1>
             { emptyMessage() }
-            <ul className="list-group">
+            <ul className={[styles.listGroup, styles.container].join(' ')}>
                 {props.items.map((item, index) => {
                     return <li key={index}
                         onClick={(event) => {
