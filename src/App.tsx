@@ -1,8 +1,11 @@
 
 import Alert from "./components/Alert";
 import ButstrapButton from "./components/ButstrapButton";
+import SimpleButton from './components/SimpleButton';
 import { useState } from 'react';
 import ListGroup from "./components/ListGroup";
+
+import { BsFillCalendarCheckFill } from "react-icons/bs";
 
 let cities = [
     'New York 2',
@@ -19,6 +22,12 @@ const handleSelectItem = (item: string) => {
 function App() {
     const [ alertVisible, setAlertVisible ] = useState(false);
 
+    return (
+        <div>
+            <BsFillCalendarCheckFill color="red" size="40" />
+            <SimpleButton>MyButton</SimpleButton>
+        </div>
+    )
     return <div><ListGroup items={cities} heading="Cities" onSelect={handleSelectItem}/></div>
     // return (
     //     <div>

@@ -1,7 +1,17 @@
 import { Fragment } from 'react';
 import { MouseEvent } from "react";
 import { useState } from 'react';
-import styles from './ListGroup.module.css';
+// import styles from './ListGroup.module.css';
+import styled from 'styled-components';
+
+const List = styled.ul`
+    list-style: none;
+    padding: 0;
+`;
+
+const ListItem = styled.li`
+    padding: 5px 0;
+`
 
 interface ListProps {
     items: string[],
@@ -25,18 +35,18 @@ function ListGroup(props: ListProps) {
         <Fragment>
             <h1>{ props.heading }</h1>
             { emptyMessage() }
-            <ul className={[styles.listGroup, styles.container].join(' ')}>
+            <List>
                 {props.items.map((item, index) => {
-                    return <li key={index}
+                    return <ListItem key={index}
                         onClick={(event) => {
                             handleClick(event, item, index);
                             props.onSelect(item)
                         }}
 
-                        className={ 'list-group-item ' + (selectedIndex == index ? 'active' : '') }>{item}</li>
+                        className={ 'list-group-item ' + (selectedIndex == index ? 'active' : '') }>{item}</ListItem>
                 })}
-                <li className="list-group-item">An item</li>
-         </ul>
+                <ListItem>An item</ListItem>
+            </List>
         </Fragment>
     );
 }
