@@ -1,44 +1,52 @@
-
-import Alert from "./components/Alert";
-import ButstrapButton from "./components/ButstrapButton";
-import SimpleButton from './components/SimpleButton';
-import { useState } from 'react';
-import ListGroup from "./components/ListGroup";
-
-import { BsFillCalendarCheckFill } from "react-icons/bs";
-
-let cities = [
-    'New York 2',
-    'San Francisco',
-    'Tokyo',
-    'London',
-    'Paris'
-];
-
-const handleSelectItem = (item: string) => {
-    console.log(item);
-}
+import React from 'react'
+import { useState } from 'react'
+import { produce } from 'immer';
 
 function App() {
-    const [ alertVisible, setAlertVisible ] = useState(false);
+    const [customers, setCustomers] = useState([
+        {
+            name: 'John',
+            address: {
+                city: 'San Francisco',
+                zipCode: 94111
+            }
+        },
+        {
+            name: 'Neal',
+            address: {
+                city: ' Indiana',
+                zipCode: 40170
+            }
+        },
+        {
+            name: 'Jake',
+            address: {
+                city: 'New York',
+                zipCode: 10007
+            }
+        }
+    ]);
 
-    return (
-        <div>
-            <BsFillCalendarCheckFill color="red" size="40" />
-            <SimpleButton>MyButton</SimpleButton>
-        </div>
-    )
-    return <div><ListGroup items={cities} heading="Cities" onSelect={handleSelectItem}/></div>
-    // return (
-    //     <div>
-    //         { alertVisible && <Alert onClose={() => { setAlertVisible(false)} }>Hello <span>World 2</span></Alert> }
+    const handleClick = () => {
+        setCustomers(produce(customers, draft => {
+            let customer = draft.find(item => item.name == 'Neal');
 
-    //         <ButstrapButton
-    //             onClick={() => { setAlertVisible(true) }}
-    //             color="primary">Push me</ButstrapButton>
-    //     </div>
+            if (customer) {
+                customer.address.city = 'New York';
+            }
+        }));
+        // setCustomers({
+        //     ...customer,
+        //     address: { ...customer.address, zipCode: 94112}
+        // });
+    }
 
-    // )
+  return (
+    <div>
+        <button onClick={handleClick}>Click me</button>
+        { customers.map(customer => <p>{customer.name}: {customer.address.city}</p>) }
+    </div>
+  )
 }
 
-export default App;
+export default App
