@@ -10,16 +10,15 @@ interface Props {
 };
 
 export default ({ categories, expences, deleteExpence }: Props ) => {
-    const [ categoryFilter, setFilter ] = useState('');
+    const [ selectedCategory, setSelectedCategory ] = useState('');
 
     const handleChange = (event) => {
         const value = event.target.value;
-        setFilter(value);
-        console.log("Selected value:", value);
+        setSelectedCategory(value);
     };
 
     const filteredItems = expences.filter(
-        item => !categoryFilter || (item.categoryId == parseInt(categoryFilter))
+        item => !selectedCategory || (item.categoryId == parseInt(selectedCategory))
     )
 
     const catrgoryName = (categoryId: number): string => {
@@ -37,7 +36,7 @@ export default ({ categories, expences, deleteExpence }: Props ) => {
         <div>
             <div>
                 <select
-                    value={categoryFilter}
+                    value={selectedCategory}
                     onChange={ handleChange }
                     className="form-select" aria-label="Default select example">
                     <option
