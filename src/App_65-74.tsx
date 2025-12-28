@@ -1,10 +1,7 @@
-import axios, { AxiosError, CanceledError } from "axios";
 import { useState, useEffect } from "react";
+import { CanceledError } from "./services/api-client";
+import userService, { User } from "./services/user-services";
 
-interface User {
-    id: number;
-    name: string;
-}
 
 export default () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -14,7 +11,7 @@ export default () => {
     const deleteUser = (user: User) => {
         setUsers(users.filter(item => item.id != user.id));
 
-        axios.delete('https://jsonplaceholder.typicode.com/users/' + user.id);
+        userService.delete(user.id);
     }
 
     const updateUser = (user: User) => {
@@ -23,30 +20,27 @@ export default () => {
 
         setUsers(users.map(u => u.id === updatedUser.id ? updatedUser : u));
 
-        axios.patch('https://jsonplaceholder.typicode.com/users/' + user.id, updatedUser)
-            .catch(err => {
-                setError(err.message);
-                setUsers(originalUsers);
-            })
+        const { request } = userService.update(updatedUser);
+
+        request.catch(err => {
+            setError(err.message);
+            setUsers(originalUsers);
+        });
     }
 
     const addUser = () => {
         const newUser = { id: 0, name: 'Mosh' };
         setUsers([ newUser, ...users ]);
 
-        console.log(
-            newUser,
-            users
-        );
+        const { request } = userService.create(newUser);
 
-        axios.post('https://jsonplaceholder.typicode.com/users/', newUser)
-            .then(response => {
-                console.log(
-                    response.data,
-                    users
-                );
-                setUsers([response.data, ...users ]);
-            });
+        request.then(response => {
+            console.log(
+                response.data,
+                users
+            );
+            setUsers([response.data, ...users ]);
+        });
     }
 
     useEffect(() => {
@@ -69,8 +63,9 @@ export default () => {
 
         setLoading(true);
 
-        axios.get<User[]>('https://jsonplaceholder.typicode.com/users', {signal: controller.signal})
-            .then(result => {
+        const {request, cancel } = userService.getAll<User>()
+
+        request.then(result => {
                 setUsers(result.data);
                 setLoading(false);
             })
@@ -84,7 +79,7 @@ export default () => {
                 setError(err.message);
             });
 
-        return () => controller.abort();
+        return () => cancel();
     }, [])
     return (
         <>
