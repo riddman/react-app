@@ -2,7 +2,7 @@ node veriosn 20.9.0
 npm run dev
 npm create vite@latest
 
-77
+79
 https://getbootstrap.com/docs/5.3/components/list-group/
 
 
